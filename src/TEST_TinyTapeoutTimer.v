@@ -17,6 +17,11 @@ top top_inst (
     .resistance_output(uo_out)
 );
 
+assign uio_oe = 8'b11111111; // Set uio_out as outputs
+
+// List all unused inputs to prevent warnings
+wire _unused = &{ena, uio_out[7:1], uio_in[7:0], ui_in[7:1], 1'b0};
+
 endmodule
 
 //Module to control functionality of RC time to resistance calculator
@@ -37,8 +42,8 @@ module top(step_set, step_input, clk, reset, resistance_output);
 
     reg step_set_reg = 1'b0;
     reg overflow_reg = 1'b0;
-    reg counter_reg = 24'd0;
-    reg resistance_output_reg = 8'd0;
+    reg [23:0] counter_reg = 24'd0;
+    reg [7:0] resistance_output_reg = 8'd0;
     reg [7:0] Capacitance = 8'd100; //Fixed capacitance value of 100pF for calculation
 
     // Instantiate the timer module
@@ -79,7 +84,7 @@ module top(step_set, step_input, clk, reset, resistance_output);
 
                 //Calculate resistance using R = t / (C * ln(2))
                 resistance_output_reg <= counter/(Capacitance*$ln(2));
-                
+
             end
         end
     end
