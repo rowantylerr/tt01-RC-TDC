@@ -9,12 +9,12 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+A way of estimating resistance for external sensors without a mixed signal ADC. Excites an external RC cicuit with a step, and measures the rise time to calculate a rough resistance.
 
 ## How to test
 
-Explain how to use your project
+Top level module contains 2 external outputs and one input. The outputs are the exciting step, and resistance value, and the input is the received rise step from RC circuit.
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+External hardware is just the RC circuit you are measuring.
