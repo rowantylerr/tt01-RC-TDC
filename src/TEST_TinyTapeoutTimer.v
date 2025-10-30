@@ -18,9 +18,10 @@ top top_inst (
 );
 
 assign uio_oe = 8'b11111111; // Set uio_out as outputs
+assign uio_out[7:1] = 7'b0; // Only using 1st bit so keep rest driven to 0
 
 // List all unused inputs to prevent warnings
-wire _unused = &{ena, uio_out[7:1], uio_in[7:0], ui_in[7:1], 1'b0};
+wire _unused = &{ena, uio_in[7:0], ui_in[7:1], 1'b0};
 
 endmodule
 
@@ -43,6 +44,7 @@ module top(step_set, step_input, clk, reset, resistance_output);
     reg step_set_reg = 1'b0;
     reg [23:0] counter_reg = 24'd0;
     reg [7:0] resistance_output_reg = 8'd0;
+    reg [23:0] calc_res = 24'd0;
     reg [7:0] Capacitance = 8'd100; //Fixed capacitance value of 100pF for calculation
 
     // Instantiate the timer module
@@ -62,6 +64,8 @@ module top(step_set, step_input, clk, reset, resistance_output);
         if (reset) begin
             step_set_reg <= 1'b0;
             counter_reg <= 24'd0;
+            calc_res <= 24'd0;
+            resistance_output_reg <= 8'd0;
         end 
         
         //Else set step_set high to start timer and excite RC circuit
@@ -77,11 +81,15 @@ module top(step_set, step_input, clk, reset, resistance_output);
             if (step_input) begin
                 step_set_reg <= 1'b0;
 
-                //Conver counter to time
+                //Convert counter to time
                 counter_reg <= counter/50;
 
-                //Calculate resistance using R = t / (C * ln(2))
-                resistance_output_reg <= counter/(Capacitance*8'd69); //Using 69 instead of ln(2)*100 to avoid floating point
+                // compute resistance using integer arithmetic into a wide register
+                // R ≈ t / (C * ln(2))  -> using integer approx factor (Capacitance*69) for ln(2) ~ 0.693
+                calc_res <= counter_reg / (Capacitance * 8'd69);
+
+                // clamp to 8 bits to avoid width truncation warnings
+                resistance_output <= (calc_res > 24'hFF) ? 8'hFF : calc_res[7:0];
 
             end
         end
