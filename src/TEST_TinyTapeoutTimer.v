@@ -41,7 +41,6 @@ module top(step_set, step_input, clk, reset, resistance_output);
     wire overflow;
 
     reg step_set_reg = 1'b0;
-    reg overflow_reg = 1'b0;
     reg [23:0] counter_reg = 24'd0;
     reg [7:0] resistance_output_reg = 8'd0;
     reg [7:0] Capacitance = 8'd100; //Fixed capacitance value of 100pF for calculation
@@ -61,29 +60,28 @@ module top(step_set, step_input, clk, reset, resistance_output);
 
         //If reset is high, reset overflow, step_set and counter
         if (reset) begin
-            overflow_reg <= 1'b0;
-            step_set_reg = 1'b0;
+            step_set_reg <= 1'b0;
             counter_reg <= 24'd0;
         end 
         
         //Else set step_set high to start timer and excite RC circuit
         else begin
-            step_set_reg = 1'b1;
+            step_set_reg <= 1'b1;
 
-            //If overflow occurs set overflow to high to be sent out
+            //If overflow occurs
             if (overflow) begin
-                overflow_reg <= 1'b1;
+                //Nothing here for now, could add error handling later
             end
 
             //When step_input is high, RC circuit has charged, so set step_set low to start discharging circuit
             if (step_input) begin
-                step_set_reg = 1'b0;
+                step_set_reg <= 1'b0;
 
                 //Conver counter to time
                 counter_reg <= counter/50;
 
                 //Calculate resistance using R = t / (C * ln(2))
-                resistance_output_reg <= counter/(Capacitance*$ln(2));
+                resistance_output_reg <= counter/(Capacitance*8'd69); //Using 69 instead of ln(2)*100 to avoid floating point
 
             end
         end
@@ -91,7 +89,6 @@ module top(step_set, step_input, clk, reset, resistance_output);
 
     assign step_set = step_set_reg;
     assign resistance_output = resistance_output_reg;
-    assign overflow = overflow_reg;
 
     
 endmodule
