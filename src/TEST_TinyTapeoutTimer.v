@@ -89,7 +89,7 @@ module top(step_set, step_input, clk, reset, resistance_output);
                 calc_res <= counter_reg / (Capacitance * 8'd69);
 
                 // clamp to 8 bits to avoid width truncation warnings
-                resistance_output <= (calc_res > 24'hFF) ? 8'hFF : calc_res[7:0];
+                resistance_output_reg <= (calc_res > 24'hFF) ? 8'hFF : calc_res[7:0];
 
             end
         end
