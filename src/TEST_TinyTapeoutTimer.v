@@ -34,10 +34,10 @@ module top(step_set, step_input, clk, reset);
     
     //Outputs will be step_set signal to excite RC circuit
     output reg step_set = 1'b0;
-	 wire overflow;
+	wire overflow;
 
-	 reg charging = 1'b0; //LED0
-	 reg discharging = 1'b0; //LED1
+	reg charging = 1'b0; //LED0
+	reg discharging = 1'b0; //LED1
 
     //Wires and Registers
     wire [23:0] counter;
@@ -237,3 +237,4 @@ endfunction
 
     
 endmodule
+
