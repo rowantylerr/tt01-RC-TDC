@@ -25,8 +25,7 @@ assign uio_out[7:1] = 7'b0; // Only using 1st bit so keep rest driven to 0
 endmodule
 
 //Module to control functionality of RC time to resistance calculator
-//Module to control functionality of RC time to resistance calculator
-module top(step_set, step_input, clk, reset, seg1, seg2, seg3, seg4, seg5, seg6, charging, discharging, overflow, step_set2, step_input2);
+module top(step_set, step_input, clk, reset);
 
     //Inputs will be clk, reset and the step_input produced by RC circuit
     input clk;
@@ -35,13 +34,10 @@ module top(step_set, step_input, clk, reset, seg1, seg2, seg3, seg4, seg5, seg6,
     
     //Outputs will be step_set signal to excite RC circuit
     output reg step_set = 1'b0;
-	 output wire overflow;
-	 
-	 output wire step_set2;
-	 output wire step_input2;
-	 
-	 assign step_set2 = step_set; //LED 8
-	 assign step_input2 = step_input;	//LED 9
+	 wire overflow;
+
+	 reg charging = 1'b0; //LED0
+	 reg discharging = 1'b0; //LED1
 
     //Wires and Registers
     wire [23:0] counter;
@@ -51,9 +47,6 @@ module top(step_set, step_input, clk, reset, seg1, seg2, seg3, seg4, seg5, seg6,
     reg [7:0] Capacitance = 8'd10; //Fixed capacitance value of 10nF for calculation
     reg clear_timer = 1'b0;
     reg discharge_start = 1'b0;
-	 
-    output reg charging = 1'b0; //LED0
-	 output reg discharging = 1'b0; //LED1
 
     reg bcd_start = 1'b0;
     wire bcd_finished;
