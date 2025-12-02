@@ -1,8 +1,3 @@
-`include "discharge_timer.v"
-`include "input_timer.v"
-`include "7seg_decoder.v"
-`include "Binary_to_BCD.v"
-
 module tt_um_rowantylerr_RC_TDC (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -242,5 +237,6 @@ endfunction
 
     
 endmodule
+
 
 
