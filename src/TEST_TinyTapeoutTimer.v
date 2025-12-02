@@ -1,3 +1,8 @@
+`include "discharge_timer.v"
+`include "input_timer.v"
+`include "7seg_decoder.v"
+`include "Binary_to_BCD.v"
+
 module tt_um_rowantylerr_RC_TDC (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -59,12 +64,12 @@ module top(step_set, step_input, clk, reset);
     wire [7:0]seg5_wire;
     wire [7:0]seg6_wire;
 
-    reg [3:0] digit1 = 1; output reg [7:0] seg1 = 8'b10011111;
-    reg [3:0] digit2 = 2; output reg [7:0] seg2 = 8'b00100101;
-    reg [3:0] digit3 = 3; output reg [7:0] seg3 = 8'b00001101;
-    reg [3:0] digit4 = 4; output reg [7:0] seg4 = 8'b10011001;
-    reg [3:0] digit5 = 5; output reg [7:0] seg5 = 8'b01001001;
-    reg [3:0] digit6 = 6; output reg [7:0] seg6 = 8'b01000001;
+    reg [3:0] digit1 = 1; reg [7:0] seg1 = 8'b10011111;
+    reg [3:0] digit2 = 2; reg [7:0] seg2 = 8'b00100101;
+    reg [3:0] digit3 = 3; reg [7:0] seg3 = 8'b00001101;
+    reg [3:0] digit4 = 4; reg [7:0] seg4 = 8'b10011001;
+    reg [3:0] digit5 = 5; reg [7:0] seg5 = 8'b01001001;
+    reg [3:0] digit6 = 6; reg [7:0] seg6 = 8'b01000001;
     
 
     // Instantiate the timer module
